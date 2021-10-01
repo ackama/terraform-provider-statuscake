@@ -18,7 +18,9 @@ func New(version string) func() *schema.Provider {
 					DefaultFunc: schema.EnvDefaultFunc("STATUSCAKE_API_KEY", nil),
 				},
 			},
-			ResourcesMap:   map[string]*schema.Resource{},
+			ResourcesMap: map[string]*schema.Resource{
+				"statuscake_uptime_test": ResourceStatusCakeUptimeTest(),
+			},
 			DataSourcesMap: map[string]*schema.Resource{},
 		}
 
