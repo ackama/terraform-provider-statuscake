@@ -45,12 +45,34 @@ terraform {
 
 provider "statuscake" {}
 
+locals {
+  # currently statuscake doesn't provide a public api for managing integrations,
+  # so you must create & get their IDs from the admin panel
+  slack_integration_id = "12345"
+}
+
+resource "statuscake_contact_group" "main_contacts" {
+  name = "Main Contacts"
+
+  email_addresses = [
+    "humans@example.com"
+  ]
+
+  integrations = [
+    local.slack_integration_id
+  ]
+}
+
 resource "statuscake_uptime_test" "my_site" {
   name        = "My Site"
   website_url = "https://www.example.com"
   test_type   = "HTTP"
   check_rate  = 300
   tags        = ["env:production", "app:example"]
+
+  contact_groups = [
+    statuscake_contact_group.main_contacts.id
+  ]
 }
 ```
 

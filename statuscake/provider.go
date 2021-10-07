@@ -19,7 +19,8 @@ func New(version string) func() *schema.Provider {
 				},
 			},
 			ResourcesMap: map[string]*schema.Resource{
-				"statuscake_uptime_test": ResourceStatusCakeUptimeTest(),
+				"statuscake_contact_group": ResourceStatusCakeContactGroup(),
+				"statuscake_uptime_test":   ResourceStatusCakeUptimeTest(),
 			},
 			DataSourcesMap: map[string]*schema.Resource{},
 		}
