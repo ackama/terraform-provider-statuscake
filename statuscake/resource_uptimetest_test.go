@@ -195,6 +195,41 @@ func TestAccUptimeTest_changing(t *testing.T) {
 	})
 }
 
+func TestAccUptimeTest_validation(t *testing.T) {
+	t.Parallel()
+
+	resource.Test(t, resource.TestCase{
+		IsUnitTest:        true,
+		PreCheck:          func() { testAccPreCheck(t) },
+		CheckDestroy:      testAccCheckUptimeTestDestroy,
+		ProviderFactories: providerFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "statuscake_uptime_test" "foo" {
+						name             = "My Site"
+						website_url      = "https://www.example.com"
+						test_type        = "F2P"
+						check_rate       = 300
+					}
+				`,
+				ExpectError: regexp.MustCompile("expected test_type to be one of"),
+			},
+			{
+				Config: `
+					resource "statuscake_uptime_test" "foo" {
+						name             = "My Site"
+						website_url      = "https://www.example.com"
+						test_type        = "HTTP"
+						check_rate       = 234
+					}
+				`,
+				ExpectError: regexp.MustCompile("expected check_rate to be one of"),
+			},
+		},
+	})
+}
+
 func TestAccUptimeTest_prettyError(t *testing.T) {
 	t.Parallel()
 

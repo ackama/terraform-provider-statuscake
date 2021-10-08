@@ -5,6 +5,7 @@ import (
 	"github.com/StatusCakeDev/statuscake-go"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func ResourceStatusCakeUptimeTest() *schema.Resource {
@@ -19,16 +20,24 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Required:    true,
 				Description: "Name of the test",
 			},
-			// todo: have a default type, maybe?
-			// todo: rename to "type" maybe?
 			// todo: ensure consistent casing?
 			// todo: validate using UptimeTestType const
-			// todo: can be one of ["DNS" "HEAD" "HTTP" "PING" "SSH" "TCP"]
 			"test_type": {
-				Type:        schema.TypeString, /* (UptimeTestType) */
+				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
 				Description: "Uptime test type",
+				ValidateFunc: validation.StringInSlice(
+					[]string{
+						"DNS",
+						"HEAD",
+						"HTTP",
+						"PING",
+						"SSH",
+						"TCP",
+					},
+					false,
+				),
 			},
 			// todo: rename to "website_url" maybe?
 			"website_url": {
@@ -37,12 +46,22 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				ForceNew:    true,
 				Description: "URL or IP address of the website under test",
 			},
-			// todo: can be one of [0 30 60 300 900 1800 3600 86400]
-			// todo: consider units, e.g. "check_rate_in_seconds" (and maybe "check_rate_in_minutes"?)
 			"check_rate": {
 				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "Number of seconds between tests",
+				ValidateFunc: validation.IntInSlice(
+					[]int{
+						0,
+						30,
+						60,
+						300,
+						900,
+						1800,
+						3600,
+						86400,
+					},
+				),
 			},
 			// todo: require if basic_pass is present
 			"basic_user": {
