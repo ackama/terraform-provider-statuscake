@@ -87,6 +87,8 @@ func testAccCheckContactGroupExists(resourceName string) resource.TestCheckFunc 
 }
 
 func TestAccContactGroup_basic(t *testing.T) {
+	t.Parallel()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		CheckDestroy:      testAccCheckContactGroupDestroy,
@@ -107,6 +109,8 @@ func TestAccContactGroup_basic(t *testing.T) {
 }
 
 func TestAccContactGroup_prettyError(t *testing.T) {
+	t.Parallel()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		CheckDestroy:      testAccCheckContactGroupDestroy,

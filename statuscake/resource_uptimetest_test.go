@@ -99,6 +99,8 @@ func testAccCheckUptimeTestExists(resourceName string) resource.TestCheckFunc {
 }
 
 func TestAccUptimeTest_basic(t *testing.T) {
+	t.Parallel()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		CheckDestroy:      testAccCheckUptimeTestDestroy,
@@ -122,6 +124,8 @@ func TestAccUptimeTest_basic(t *testing.T) {
 }
 
 func TestAccUptimeTest_changing(t *testing.T) {
+	t.Parallel()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		CheckDestroy:      testAccCheckUptimeTestDestroy,
@@ -192,6 +196,8 @@ func TestAccUptimeTest_changing(t *testing.T) {
 }
 
 func TestAccUptimeTest_prettyError(t *testing.T) {
+	t.Parallel()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		CheckDestroy:      testAccCheckUptimeTestDestroy,

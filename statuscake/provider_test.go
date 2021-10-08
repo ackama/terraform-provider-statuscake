@@ -33,6 +33,8 @@ func statusCakeAPIClient() *statuscake.APIClient {
 }
 
 func TestProvider(t *testing.T) {
+	t.Parallel()
+
 	if err := provider.New("dev")().InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
