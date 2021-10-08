@@ -10,6 +10,7 @@ import (
 
 func ResourceStatusCakeUptimeTest() *schema.Resource {
 	return &schema.Resource{
+		Description:   "Manages a StatusCake Uptime Test",
 		CreateContext: resourceStatusCakeUptimeTestCreate,
 		ReadContext:   resourceStatusCakeUptimeTestRead,
 		UpdateContext: resourceStatusCakeUptimeTestUpdate,
@@ -22,6 +23,7 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 			},
 			// todo: ensure consistent casing?
 			// todo: validate using UptimeTestType const
+			// todo: include valid values in description
 			"test_type": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -45,6 +47,7 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				ForceNew:    true,
 				Description: "URL or IP address of the website under test",
 			},
+			// todo: include valid values in description
 			"check_rate": {
 				Type:        schema.TypeInt,
 				Required:    true,
@@ -76,6 +79,7 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				ForceNew:    true,
 				Description: "Basic authentication password",
 			},
+			// todo: mention max value in description
 			"confirmation": {
 				Type:        schema.TypeInt,
 				Optional:    true,
