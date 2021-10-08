@@ -182,12 +182,13 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Optional:    true,
 				Description: "List of regions on which to run tests. The values required for this parameter can be retrieved from the GET /v1/uptime-locations endpoint.",
 			},
-			// todo: rename to "status_codes"
-			// todo: change to TypeList
-			"status_codes_csv": {
-				Type:        schema.TypeString,
+			"status_codes": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Optional:    true,
-				Description: "Comma separated list of status codes that trigger an alert",
+				Description: "List of status codes that trigger an alert",
 			},
 			// todo: rename to "tags"
 			// todo: change to TypeList
@@ -286,7 +287,9 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 		req = req.PostRaw(v.(string))
 	}
 	// todo: 'regions'
-	// todo: 'status_codes_csv'
+	if v, ok := d.GetOk("status_codes"); ok {
+		req = req.StatusCodes(asListOfStrings(v))
+	}
 	// todo: 'tags_csv'
 	if v, ok := d.GetOk("timeout"); ok {
 		req = req.Timeout(int32(v.(int)))
@@ -312,6 +315,25 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	logResponse(res)
 
 	d.SetId(res.Data.NewID)
+
+	// currently, there isn't any way to set status_codes to "nothing" when creating
+	// a new uptime test (meaning it always has a default value of all the codes)
+	// and terraform has no way of providing a default value for a list.
+	//
+	// so we have to do an update straight after creating the uptime test to ensure
+	// that the state matches what terraform expects
+	// todo: discuss with StatusCake if this could be supported somehow?
+	err = client.UpdateUptimeTest(context.TODO(), d.Id()).
+		StatusCodes(asListOfStrings(d.Get("status_codes"))).
+		Execute()
+
+	if err != nil {
+		logStatusCakeAPIError(err)
+
+		return asDiag(err.(statuscake.APIError))
+	}
+
+	logResponse(res)
 
 	return resourceStatusCakeUptimeTestRead(ctx, d, meta)
 }
@@ -392,7 +414,9 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 	// todo: 'regions'
-	// todo: 'status_codes_csv'
+	if err := d.Set("status_codes", res.Data.StatusCodes); err != nil {
+		return diag.FromErr(err)
+	}
 	// todo: 'tags_csv'
 	if err := d.Set("timeout", res.Data.Timeout); err != nil {
 		return diag.FromErr(err)
@@ -475,7 +499,9 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 			req = req.PostRaw(d.Get("post_raw").(string))
 		}
 		// todo: 'regions'
-		// todo: 'status_codes_csv'
+		if d.HasChange("status_codes") {
+			req = req.StatusCodes(asListOfStrings(d.Get("status_codes")))
+		}
 		// todo: 'tags_csv'
 		if d.HasChange("timeout") {
 			req = req.Timeout(int32(d.Get("timeout").(int)))
