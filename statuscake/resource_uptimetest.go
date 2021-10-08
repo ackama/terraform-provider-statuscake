@@ -39,7 +39,6 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 					false,
 				),
 			},
-			// todo: rename to "website_url" maybe?
 			"website_url": {
 				Type:        schema.TypeString, /* <uri> */
 				Required:    true,
@@ -63,7 +62,6 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 					},
 				),
 			},
-			// todo: require if basic_pass is present
 			"basic_user": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -71,7 +69,6 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				ForceNew:    true,
 				Description: "Basic authentication username",
 			},
-			// todo: require if basic_user is present
 			"basic_pass": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -79,7 +76,6 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				ForceNew:    true,
 				Description: "Basic authentication password",
 			},
-			// todo: rename to "confirmation_servers"
 			"confirmation": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -117,7 +113,6 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Optional:    true,
 				Description: "Hostname or IP address of the nameserver to query",
 			},
-			// todo: rename to "check_ssl_cert_expiration" (or something?)
 			"enable_ssl_alert": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -145,13 +140,11 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Optional:    true,
 				Description: "Name of the hosting provider",
 			},
-			// todo: maybe rename to "check_headers"?
 			"include_header": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "Include header content in string match search",
 			},
-			// todo: maybe rename to "enabled" + invert?
 			"paused": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -370,8 +363,6 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	if err := d.Set("check_rate", res.Data.CheckRate); err != nil {
 		return diag.FromErr(err)
 	}
-	// todo: 'basic_user'
-	// todo: 'basic_pass'
 	if err := d.Set("confirmation", res.Data.Confirmation); err != nil {
 		return diag.FromErr(err)
 	}
