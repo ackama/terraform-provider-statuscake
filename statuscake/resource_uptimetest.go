@@ -208,8 +208,7 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Default:     4,
 				Description: "The number of minutes to wait before sending an alert",
 			},
-			// todo: rename to "use_cookie_storage_jar" maybe?
-			"use_jar": {
+			"cookie_storage": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
@@ -295,7 +294,7 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	if v, ok := d.GetOk("trigger_rate"); ok {
 		req = req.TriggerRate(int32(v.(int)))
 	}
-	if v, ok := d.GetOk("use_jar"); ok {
+	if v, ok := d.GetOk("cookie_storage"); ok {
 		req = req.UseJAR(v.(bool))
 	}
 	if v, ok := d.GetOk("user_agent"); ok {
@@ -401,7 +400,7 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	if err := d.Set("trigger_rate", res.Data.TriggerRate); err != nil {
 		return diag.FromErr(err)
 	}
-	if err := d.Set("use_jar", res.Data.UseJAR); err != nil {
+	if err := d.Set("cookie_storage", res.Data.UseJAR); err != nil {
 		return diag.FromErr(err)
 	}
 	if err := d.Set("user_agent", res.Data.UserAgent); err != nil {
@@ -484,8 +483,8 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 		if d.HasChange("trigger_rate") {
 			req = req.TriggerRate(int32(d.Get("trigger_rate").(int)))
 		}
-		if d.HasChange("use_jar") {
-			req = req.UseJAR(d.Get("use_jar").(bool))
+		if d.HasChange("cookie_storage") {
+			req = req.UseJAR(d.Get("cookie_storage").(bool))
 		}
 		if d.HasChange("user_agent") {
 			req = req.UserAgent(d.Get("user_agent").(string))

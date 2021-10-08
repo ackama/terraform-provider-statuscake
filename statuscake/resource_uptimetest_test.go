@@ -153,7 +153,7 @@ func TestAccUptimeTest_changing(t *testing.T) {
 						post_raw         = ""
 						timeout          = 60
 						trigger_rate     = 5
-						use_jar          = true
+						cookie_storage   = true
 						user_agent       = "StatusCake"
 					}
 				`,
@@ -183,7 +183,7 @@ func TestAccUptimeTest_changing(t *testing.T) {
 						post_raw         = "{}"
 						timeout          = 30
 						trigger_rate     = 10
-						use_jar          = false
+						cookie_storage   = false
 						user_agent       = "StatusCake2"
 					}
 				`,
