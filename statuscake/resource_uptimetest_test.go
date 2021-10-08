@@ -156,6 +156,7 @@ func TestAccUptimeTest_changing(t *testing.T) {
 						cookie_storage   = true
 						user_agent       = "StatusCake"
 						status_codes 		 = ["401", "405", "406"]
+						tags             = ["one", "two", "three"]
 					}
 				`,
 				Check: resource.ComposeTestCheckFunc(
@@ -187,6 +188,7 @@ func TestAccUptimeTest_changing(t *testing.T) {
 						cookie_storage   = false
 						user_agent       = "StatusCake2"
 						status_codes 		 = ["401", "301"]
+						tags             = ["five", "six"]
 					}
 				`,
 				Check: resource.ComposeTestCheckFunc(

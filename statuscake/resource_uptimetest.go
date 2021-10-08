@@ -190,12 +190,13 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Optional:    true,
 				Description: "List of status codes that trigger an alert",
 			},
-			// todo: rename to "tags"
-			// todo: change to TypeList
-			"tags_csv": {
-				Type:        schema.TypeString,
+			"tags": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Optional:    true,
-				Description: "Comma separated list of tags",
+				Description: "List of tags",
 			},
 			"timeout": {
 				Type:        schema.TypeInt,
@@ -290,7 +291,9 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	if v, ok := d.GetOk("status_codes"); ok {
 		req = req.StatusCodes(asListOfStrings(v))
 	}
-	// todo: 'tags_csv'
+	if v, ok := d.GetOk("tags"); ok {
+		req = req.Tags(asListOfStrings(v))
+	}
 	if v, ok := d.GetOk("timeout"); ok {
 		req = req.Timeout(int32(v.(int)))
 	}
@@ -417,7 +420,9 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	if err := d.Set("status_codes", res.Data.StatusCodes); err != nil {
 		return diag.FromErr(err)
 	}
-	// todo: 'tags_csv'
+	if err := d.Set("tags", res.Data.Tags); err != nil {
+		return diag.FromErr(err)
+	}
 	if err := d.Set("timeout", res.Data.Timeout); err != nil {
 		return diag.FromErr(err)
 	}
@@ -502,7 +507,9 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 		if d.HasChange("status_codes") {
 			req = req.StatusCodes(asListOfStrings(d.Get("status_codes")))
 		}
-		// todo: 'tags_csv'
+		if d.HasChange("tags") {
+			req = req.Tags(asListOfStrings(d.Get("tags")))
+		}
 		if d.HasChange("timeout") {
 			req = req.Timeout(int32(d.Get("timeout").(int)))
 		}
