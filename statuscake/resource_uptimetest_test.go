@@ -6,6 +6,7 @@ import (
 	"github.com/StatusCakeDev/statuscake-go"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"regexp"
 	"testing"
 )
 
@@ -185,6 +186,54 @@ func TestAccUptimeTest_changing(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckUptimeTestExists("statuscake_uptime_test.foo"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccUptimeTest_prettyError(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		CheckDestroy:      testAccCheckUptimeTestDestroy,
+		ProviderFactories: providerFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "statuscake_uptime_test" "foo" {
+						name             = "My Site"
+						website_url      = "https://www.example.com"
+						test_type        = "HTTP"
+						check_rate       = 300
+						confirmation     = 5
+					}
+				`,
+				ExpectError: regexp.MustCompile("Confirmation must be no more than 3"),
+			},
+			{
+				Config: `
+					resource "statuscake_uptime_test" "foo" {
+						name             = "My Site"
+						website_url      = "https://www.example.com"
+						test_type        = "HTTP"
+						check_rate       = 300
+						confirmation     = 3
+					}
+				`,
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckUptimeTestExists("statuscake_uptime_test.foo"),
+				),
+			},
+			{
+				Config: `
+					resource "statuscake_uptime_test" "foo" {
+						name             = "My Site"
+						website_url      = "https://www.example.com"
+						test_type        = "HTTP"
+						check_rate       = 300
+						confirmation     = 5
+					}
+				`,
+				ExpectError: regexp.MustCompile("Confirmation must be no more than 3"),
 			},
 		},
 	})

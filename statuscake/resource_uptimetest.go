@@ -283,8 +283,12 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	res, err := req.Execute()
 
 	if err != nil {
-		return diag.FromErr(err)
+		logStatusCakeAPIError(err)
+
+		return asDiag(err.(statuscake.APIError))
 	}
+
+	logResponse(res)
 
 	d.SetId(res.Data.NewID)
 
@@ -299,10 +303,14 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	res, err := client.GetUptimeTest(context.TODO(), d.Id()).Execute()
 
 	if err != nil {
+		logStatusCakeAPIError(err)
+
 		if err.(statuscake.APIError).Status != 404 {
 			return diag.FromErr(err)
 		}
 	}
+
+	logResponse(res)
 
 	if err := d.Set("name", res.Data.Name); err != nil {
 		return diag.FromErr(err)
@@ -458,7 +466,9 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 		}
 
 		if err := req.Execute(); err != nil {
-			return diag.FromErr(err)
+			logStatusCakeAPIError(err)
+
+			return asDiag(err.(statuscake.APIError))
 		}
 	}
 
@@ -473,7 +483,16 @@ func resourceStatusCakeUptimeTestDelete(ctx context.Context, d *schema.ResourceD
 	err := client.DeleteUptimeTest(context.TODO(), d.Id()).Execute()
 
 	if err != nil {
-		return diag.FromErr(err)
+		logStatusCakeAPIError(err)
+
+		if err.(statuscake.APIError).Status != 404 {
+			return diag.FromErr(err)
+		}
+
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "Uptime test has already been deleted",
+		})
 	}
 
 	return diags
