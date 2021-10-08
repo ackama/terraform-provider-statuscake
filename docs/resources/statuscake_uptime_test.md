@@ -3,7 +3,7 @@
 page_title: "statuscake_uptime_test Resource - terraform-provider-statuscake"
 subcategory: ""
 description: |-
-
+  Manages a StatusCake Uptime Test
 ---
 
 # statuscake_uptime_test (Resource)

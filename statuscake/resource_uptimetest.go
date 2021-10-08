@@ -10,6 +10,7 @@ import (
 
 func ResourceStatusCakeUptimeTest() *schema.Resource {
 	return &schema.Resource{
+		Description:   "Manages a StatusCake Uptime Test",
 		CreateContext: resourceStatusCakeUptimeTestCreate,
 		ReadContext:   resourceStatusCakeUptimeTestRead,
 		UpdateContext: resourceStatusCakeUptimeTestUpdate,

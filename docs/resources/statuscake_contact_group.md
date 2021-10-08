@@ -3,7 +3,7 @@
 page_title: "statuscake_contact_group Resource - terraform-provider-statuscake"
 subcategory: ""
 description: |-
-
+  Manages a StatusCake Contact Group
 ---
 
 # statuscake_contact_group (Resource)
