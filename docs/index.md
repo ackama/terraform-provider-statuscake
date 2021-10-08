@@ -15,7 +15,7 @@ description: |-
 ```terraform
 provider "statuscake" {
   # you can also provide the api key via the STATUSCAKE_API_KEY env variable
-  api_token = "..."
+  api_key = "..."
 }
 ```
 
@@ -24,4 +24,4 @@ provider "statuscake" {
 
 ### Optional
 
-- **api_token** (String, Sensitive)
+- **api_key** (String, Sensitive)

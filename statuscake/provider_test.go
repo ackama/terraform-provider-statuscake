@@ -27,9 +27,9 @@ func testAccPreCheck(t *testing.T) {
 }
 
 func statusCakeAPIClient() *statuscake.APIClient {
-	apiToken := os.Getenv("STATUSCAKE_API_KEY")
+	apiKey := os.Getenv("STATUSCAKE_API_KEY")
 
-	return statuscake.NewAPIClient(apiToken)
+	return statuscake.NewAPIClient(apiKey)
 }
 
 func TestProvider(t *testing.T) {
