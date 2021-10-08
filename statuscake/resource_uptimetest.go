@@ -67,12 +67,13 @@ func ResourceStatusCakeUptimeTest() *schema.Resource {
 				Default:     2,
 				Description: "Number of confirmation servers to confirm downtime before an alert is triggered",
 			},
-			// todo: rename to "contact_groups"
-			// todo: change to TypeList
-			"contact_groups_csv": {
-				Type:        schema.TypeString,
+			"contact_groups": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Optional:    true,
-				Description: "Comma separated list of contact group IDs",
+				Description: "List of contact group IDs",
 			},
 			"custom_header": {
 				Type:        schema.TypeString,
@@ -225,7 +226,9 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	if v, ok := d.GetOk("confirmation"); ok {
 		req = req.Confirmation(int32(v.(int)))
 	}
-	// todo: 'contact_groups_csv'
+	if v, ok := d.GetOk("contact_groups"); ok {
+		req = req.ContactGroups(asListOfStrings(v))
+	}
 	if v, ok := d.GetOk("custom_header"); ok {
 		req = req.CustomHeader(v.(string))
 	}
@@ -329,7 +332,9 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	if err := d.Set("confirmation", res.Data.Confirmation); err != nil {
 		return diag.FromErr(err)
 	}
-	// todo: 'contact_groups_csv'
+	if err := d.Set("contact_groups", res.Data.ContactGroups); err != nil {
+		return diag.FromErr(err)
+	}
 	if err := d.Set("custom_header", res.Data.CustomHeader); err != nil {
 		return diag.FromErr(err)
 	}
@@ -410,7 +415,9 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 		if d.HasChange("confirmation") {
 			req = req.Confirmation(int32(d.Get("confirmation").(int)))
 		}
-		// todo: 'contact_groups_csv'
+		if d.HasChange("contact_groups") {
+			req = req.ContactGroups(asListOfStrings(d.Get("contact_groups")))
+		}
 		if d.HasChange("custom_header") {
 			req = req.CustomHeader(d.Get("custom_header").(string))
 		}
