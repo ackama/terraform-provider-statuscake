@@ -1,0 +1,8 @@
+output:
+  sort-results: true
+linters:
+  disable:
+    - exhaustivestruct
+  presets:
+    - sql
+    - test
