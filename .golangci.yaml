@@ -3,7 +3,11 @@ output:
 linters:
   disable:
     - exhaustivestruct
+    - scopelint
+    - maligned
   presets:
+    - bugs
+    - error
     - performance
     - sql
     - test

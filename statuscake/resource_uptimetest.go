@@ -309,7 +309,7 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		return asDiag(err.(statuscake.APIError))
+		return apiErrorDiag(err)
 	}
 
 	logResponse(res)
@@ -330,7 +330,7 @@ func resourceStatusCakeUptimeTestCreate(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		return asDiag(err.(statuscake.APIError))
+		return apiErrorDiag(err)
 	}
 
 	logResponse(res)
@@ -348,7 +348,7 @@ func resourceStatusCakeUptimeTestRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		if err.(statuscake.APIError).Status != 404 {
+		if !isNotFoundAPIError(err) {
 			return diag.FromErr(err)
 		}
 	}
@@ -521,7 +521,7 @@ func resourceStatusCakeUptimeTestUpdate(ctx context.Context, d *schema.ResourceD
 		if err := req.Execute(); err != nil {
 			logStatusCakeAPIError(err)
 
-			return asDiag(err.(statuscake.APIError))
+			return apiErrorDiag(err)
 		}
 	}
 
@@ -538,7 +538,7 @@ func resourceStatusCakeUptimeTestDelete(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		if err.(statuscake.APIError).Status != 404 {
+		if !isNotFoundAPIError(err) {
 			return diag.FromErr(err)
 		}
 

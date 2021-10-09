@@ -80,7 +80,7 @@ func resourceStatusCakeContactGroupCreate(ctx context.Context, d *schema.Resourc
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		return asDiag(err.(statuscake.APIError))
+		return apiErrorDiag(err)
 	}
 
 	logResponse(res)
@@ -100,7 +100,7 @@ func resourceStatusCakeContactGroupRead(ctx context.Context, d *schema.ResourceD
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		if err.(statuscake.APIError).Status != 404 {
+		if !isNotFoundAPIError(err) {
 			return diag.FromErr(err)
 		}
 	}
@@ -153,7 +153,7 @@ func resourceStatusCakeContactGroupUpdate(ctx context.Context, d *schema.Resourc
 		if err := req.Execute(); err != nil {
 			logStatusCakeAPIError(err)
 
-			return asDiag(err.(statuscake.APIError))
+			return apiErrorDiag(err)
 		}
 	}
 
@@ -170,7 +170,7 @@ func resourceStatusCakeContactGroupDelete(ctx context.Context, d *schema.Resourc
 	if err != nil {
 		logStatusCakeAPIError(err)
 
-		if err.(statuscake.APIError).Status != 404 {
+		if !isNotFoundAPIError(err) {
 			return diag.FromErr(err)
 		}
 

@@ -22,7 +22,7 @@ func fetchAllUptimeTests() ([]statuscake.UptimeTestOverview, error) {
 			Execute()
 
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to fetch uptime tests: %w", err)
 		}
 
 		uptimeTests = append(uptimeTests, res.Data...)

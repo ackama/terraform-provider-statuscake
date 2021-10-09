@@ -16,7 +16,7 @@ func fetchAllContactGroups() ([]statuscake.ContactGroup, error) {
 	res, err := client.ListContactGroups(context.TODO()).Execute()
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to fetch contact groups: %w", err)
 	}
 
 	return res.Data, nil
