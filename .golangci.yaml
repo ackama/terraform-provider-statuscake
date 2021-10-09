@@ -4,5 +4,6 @@ linters:
   disable:
     - exhaustivestruct
   presets:
+    - performance
     - sql
     - test

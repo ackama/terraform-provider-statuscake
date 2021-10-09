@@ -8,7 +8,7 @@ import (
 )
 
 func asListOfStrings(list interface{}) []string {
-	var strings []string
+	strings := make([]string, 0, len(list.([]interface{})))
 
 	for _, item := range list.([]interface{}) {
 		strings = append(strings, item.(string))
