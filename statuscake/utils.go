@@ -2,13 +2,14 @@ package statuscake
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/StatusCakeDev/statuscake-go"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"log"
 )
 
 func asListOfStrings(list interface{}) []string {
-	var strings []string
+	strings := make([]string, 0, len(list.([]interface{})))
 
 	for _, item := range list.([]interface{}) {
 		strings = append(strings, item.(string))
@@ -17,11 +18,16 @@ func asListOfStrings(list interface{}) []string {
 	return strings
 }
 
-func asDiag(apiError statuscake.APIError) diag.Diagnostics {
+func apiErrorDiag(err error) diag.Diagnostics {
+	var apiError statuscake.APIError
 	var diags diag.Diagnostics
 
-	for _, errors := range apiError.Errors {
-		for _, message := range errors {
+	if !errors.As(err, &apiError) {
+		return diag.Errorf("Unknown error (received error that unexpectedly not an api error)")
+	}
+
+	for _, errs := range apiError.Errors {
+		for _, message := range errs {
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  message,
@@ -30,6 +36,12 @@ func asDiag(apiError statuscake.APIError) diag.Diagnostics {
 	}
 
 	return diags
+}
+
+func isNotFoundAPIError(err error) bool {
+	var apiError statuscake.APIError
+
+	return errors.As(err, &apiError) && apiError.Status == 404
 }
 
 func logResponse(res interface{}) {
@@ -49,9 +61,9 @@ func prettifyObject(obj interface{}) string {
 }
 
 func logStatusCakeAPIError(err error) {
-	statuscakeError, ok := err.(statuscake.APIError)
+	var statuscakeError statuscake.APIError
 
-	if !ok {
+	if !errors.As(err, &statuscakeError) {
 		log.Printf("[WARN] Was provided an error that was not from StatusCake API")
 		log.Printf("[DEBUG] Error: %s", err)
 

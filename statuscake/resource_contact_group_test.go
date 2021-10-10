@@ -16,7 +16,7 @@ func fetchAllContactGroups() ([]statuscake.ContactGroup, error) {
 	res, err := client.ListContactGroups(context.TODO()).Execute()
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to fetch contact groups: %w", err)
 	}
 
 	return res.Data, nil
@@ -71,7 +71,7 @@ func testAccCheckContactGroupExists(resourceName string) resource.TestCheckFunc 
 
 		for _, contactGroup := range contactGroups {
 			if contactGroup.ID == rs.Primary.ID {
-				finds += 1
+				finds += 1 //nolint:revive
 			}
 		}
 
