@@ -9,7 +9,7 @@ import (
 
 func ResourceStatusCakeContactGroup() *schema.Resource {
 	return &schema.Resource{
-		Description: "Manages a StatusCake Contact Group",
+		Description:   "Manages a StatusCake Contact Group",
 		CreateContext: resourceStatusCakeContactGroupCreate,
 		ReadContext:   resourceStatusCakeContactGroupRead,
 		UpdateContext: resourceStatusCakeContactGroupUpdate,

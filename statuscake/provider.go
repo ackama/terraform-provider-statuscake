@@ -11,7 +11,7 @@ func New(version string) func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
 			Schema: map[string]*schema.Schema{
-				"api_token": &schema.Schema{
+				"api_token": {
 					Type:        schema.TypeString,
 					Optional:    true,
 					Sensitive:   true,
