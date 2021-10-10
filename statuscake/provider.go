@@ -11,7 +11,7 @@ func New(version string) func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
 			Schema: map[string]*schema.Schema{
-				"api_token": {
+				"api_key": {
 					Type:        schema.TypeString,
 					Optional:    true,
 					Sensitive:   true,
@@ -33,15 +33,15 @@ func New(version string) func() *schema.Provider {
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		apiToken := d.Get("api_token").(string)
+		apiKey := d.Get("api_key").(string)
 
 		var diags diag.Diagnostics
 
-		if apiToken == "" {
-			return nil, diag.Errorf("Missing api_token")
+		if apiKey == "" {
+			return nil, diag.Errorf("Missing api_key")
 		}
 
-		client := statuscake.NewAPIClient(apiToken)
+		client := statuscake.NewAPIClient(apiKey)
 
 		return client, diags
 	}
