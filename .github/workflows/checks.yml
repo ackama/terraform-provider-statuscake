@@ -94,4 +94,10 @@ jobs:
       - uses: bflad/tfproviderlint-github-action@master
         with:
           args: ./...
+  go-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - run: make lint-with-go-fmt
