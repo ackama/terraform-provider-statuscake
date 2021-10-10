@@ -35,3 +35,14 @@ test:
 
 testacc:
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
+
+lint:	lint-with-golangci-lint lint-with-tfproviderlint lint-with-go-fmt
+
+lint-with-golangci-lint:
+	go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.42.1 run ./... --max-same-issues 0
+
+lint-with-tfproviderlint:
+	go run github.com/bflad/tfproviderlint/cmd/tfproviderlint@v0.27.1 ./...
+
+lint-with-go-fmt:
+	gofmt -s -d */**.go
