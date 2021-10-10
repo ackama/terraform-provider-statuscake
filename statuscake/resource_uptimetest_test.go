@@ -27,7 +27,8 @@ func fetchAllUptimeTests() ([]statuscake.UptimeTestOverview, error) {
 
 		uptimeTests = append(uptimeTests, res.Data...)
 
-		currentPage += 1
+		currentPage += 1 //nolint:revive
+
 		if currentPage >= *res.Metadata.PageCount {
 			return uptimeTests, nil
 		}
@@ -83,7 +84,7 @@ func testAccCheckUptimeTestExists(resourceName string) resource.TestCheckFunc { 
 
 		for _, uptimeTest := range uptimeTests {
 			if uptimeTest.ID == rs.Primary.ID {
-				finds += 1
+				finds += 1 //nolint:revive
 			}
 		}
 

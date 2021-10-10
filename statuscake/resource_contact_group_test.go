@@ -71,7 +71,7 @@ func testAccCheckContactGroupExists(resourceName string) resource.TestCheckFunc 
 
 		for _, contactGroup := range contactGroups {
 			if contactGroup.ID == rs.Primary.ID {
-				finds += 1
+				finds += 1 //nolint:revive
 			}
 		}
 
