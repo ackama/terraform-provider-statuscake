@@ -2,11 +2,14 @@ output:
   sort-results: true
 linters:
   disable:
-    - exhaustivestruct
-    - scopelint
-    - maligned
+    - exhaustivestruct # overkill
+    - scopelint        # deprecated
+    - maligned         # deprecated
+    - godox            # to-do comments are fine
+    - godot            # comments are fine without full stops
   presets:
     - bugs
+    - comment
     - error
     - performance
     - sql
