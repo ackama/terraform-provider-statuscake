@@ -60,7 +60,7 @@ func testAccCheckUptimeTestDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckUptimeTestExists(resourceName string) resource.TestCheckFunc {
+func testAccCheckUptimeTestExists(resourceName string) resource.TestCheckFunc { //nolint:unparam
 	return func(s *terraform.State) error {
 		// retrieve the resource by name from state
 		rs, ok := s.RootModule().Resources[resourceName]

@@ -11,6 +11,7 @@ linters:
     - performance
     - sql
     - test
+    - unused
 
 issues:
   exclude-rules:
